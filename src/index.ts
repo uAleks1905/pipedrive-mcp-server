@@ -3,6 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import * as pipedrive from "pipedrive";
 import * as dotenv from 'dotenv';
+import { readFileSync } from 'fs';
 
 // Type for error handling
 interface ErrorWithMessage {
@@ -52,10 +53,28 @@ const pipelinesApi = new pipedrive.PipelinesApi(apiClient);
 const itemSearchApi = new pipedrive.ItemSearchApi(apiClient);
 const leadsApi = new pipedrive.LeadsApi(apiClient);
 
+function getServerVersion(): string {
+  try {
+    const packageJson = JSON.parse(
+      readFileSync(new URL('../package.json', import.meta.url), 'utf-8')
+    ) as { version?: unknown };
+
+    if (typeof packageJson.version === 'string') {
+      return packageJson.version;
+    }
+
+    console.warn("Package version is missing or not a string; falling back to 'unknown'.");
+  } catch (error) {
+    console.warn("Unable to read package.json for version information:", getErrorMessage(error));
+  }
+
+  return 'unknown';
+}
+
 // Create MCP server
 const server = new McpServer({
   name: "pipedrive-mcp-server",
-  version: "1.0.0",
+  version: getServerVersion(),
   capabilities: {
     resources: {},
     tools: {},
