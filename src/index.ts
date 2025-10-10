@@ -3,7 +3,9 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import * as pipedrive from "pipedrive";
 import * as dotenv from 'dotenv';
-import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 // Type for error handling
 interface ErrorWithMessage {
@@ -55,11 +57,9 @@ const leadsApi = new pipedrive.LeadsApi(apiClient);
 
 function getServerVersion(): string {
   try {
-    const packageJson = JSON.parse(
-      readFileSync(new URL('../package.json', import.meta.url), 'utf-8')
-    ) as { version?: unknown };
+    const packageJson = require('../package.json') as { version?: unknown };
 
-    if (typeof packageJson.version === 'string') {
+    if (typeof packageJson.version === 'string' && packageJson.version.trim() !== '') {
       return packageJson.version;
     }
 
