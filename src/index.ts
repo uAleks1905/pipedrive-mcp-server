@@ -3,9 +3,12 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import * as pipedrive from "pipedrive";
 import * as dotenv from 'dotenv';
-import { createRequire } from 'module';
+import { readFileSync } from 'fs';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
-const require = createRequire(import.meta.url);
+const moduleDir = dirname(fileURLToPath(import.meta.url));
+const packageJsonPath = resolve(moduleDir, "../package.json");
 
 // Type for error handling
 interface ErrorWithMessage {
@@ -55,12 +58,26 @@ const pipelinesApi = new pipedrive.PipelinesApi(apiClient);
 const itemSearchApi = new pipedrive.ItemSearchApi(apiClient);
 const leadsApi = new pipedrive.LeadsApi(apiClient);
 
+let cachedVersion: string | null = null;
+
 function getServerVersion(): string {
+  if (cachedVersion) {
+    return cachedVersion;
+  }
+
+  const envVersion = process.env.npm_package_version;
+  if (typeof envVersion === 'string' && envVersion.trim() !== '') {
+    cachedVersion = envVersion.trim();
+    return cachedVersion;
+  }
+
   try {
-    const packageJson = require('../package.json') as { version?: unknown };
+    const packageJsonContent = readFileSync(packageJsonPath, "utf8");
+    const packageJson = JSON.parse(packageJsonContent) as { version?: unknown };
 
     if (typeof packageJson.version === 'string' && packageJson.version.trim() !== '') {
-      return packageJson.version;
+      cachedVersion = packageJson.version.trim();
+      return cachedVersion;
     }
 
     console.warn("Package version is missing or not a string; falling back to 'unknown'.");
@@ -68,7 +85,8 @@ function getServerVersion(): string {
     console.warn("Unable to read package.json for version information:", getErrorMessage(error));
   }
 
-  return 'unknown';
+  cachedVersion = 'unknown';
+  return cachedVersion;
 }
 
 // Create MCP server
