@@ -12,7 +12,30 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for the
 - Optional JWT authentication for SSE transport
 - Docker support with multi-stage builds
 
-## Quick Start
+## Quick Start (npx — no install needed)
+
+Add this to your `.mcp.json` (Claude Code) or `claude_desktop_config.json` (Claude Desktop):
+
+```json
+{
+  "mcpServers": {
+    "pipedrive": {
+      "command": "npx",
+      "args": ["-y", "@ualeks/pipedrive-mcp-server"],
+      "env": {
+        "PIPEDRIVE_API_TOKEN": "your_api_token_here",
+        "PIPEDRIVE_DOMAIN": "your-company.pipedrive.com"
+      }
+    }
+  }
+}
+```
+
+That's it. No cloning, no building — just add your Pipedrive API token and domain.
+
+## Manual Setup (from source)
+
+If you prefer to run from source:
 
 1. Clone and install:
    ```bash
@@ -33,28 +56,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for the
    npm start
    ```
 
-## Using with Claude Code
-
-Create a `.mcp.json` file in your project directory (see `.mcp.json.example`):
-
-```json
-{
-  "mcpServers": {
-    "pipedrive": {
-      "command": "node",
-      "args": ["/path/to/pipedrive-mcp-server/build/index.js"],
-      "env": {
-        "PIPEDRIVE_API_TOKEN": "your_api_token_here",
-        "PIPEDRIVE_DOMAIN": "your-company.pipedrive.com"
-      }
-    }
-  }
-}
-```
-
-## Using with Claude Desktop
-
-Edit your `claude_desktop_config.json`:
+Then point your MCP config to the local build:
 
 ```json
 {
