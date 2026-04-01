@@ -8,54 +8,31 @@ declare module 'pipedrive' {
         name: string;
         apiKey: string;
       };
-      basic_authentication: {
-        type: string;
-      };
-      oauth2: {
-        type: string;
-        accessToken: string;
-      };
+      basic_authentication: { type: string };
+      oauth2: { type: string; accessToken: string };
     };
     defaultHeaders: Record<string, string>;
     timeout: number;
     constructor();
   }
 
-  export class DealsApi {
-    constructor(apiClient: ApiClient);
-    getDeals(): Promise<any>;
-    getDeal(params: { id: number }): Promise<any>;
-    searchDeals(params: { term: string }): Promise<any>;
-  }
-
-  export class PersonsApi {
-    constructor(apiClient: ApiClient);
-    getPersons(): Promise<any>;
-    getPerson(params: { id: number }): Promise<any>;
-    searchPersons(params: { term: string }): Promise<any>;
-  }
-
-  export class OrganizationsApi {
-    constructor(apiClient: ApiClient);
-    getOrganizations(): Promise<any>;
-    getOrganization(params: { id: number }): Promise<any>;
-    searchOrganizations(params: { term: string }): Promise<any>;
-  }
-
-  export class PipelinesApi {
-    constructor(apiClient: ApiClient);
-    getPipelines(): Promise<any>;
-    getPipeline(params: { id: number }): Promise<any>;
-    getPipelineStages(params: { id: number }): Promise<any>;
-  }
-
-  export class ItemSearchApi {
-    constructor(apiClient: ApiClient);
-    searchItem(params: { term: string, itemType?: string }): Promise<any>;
-  }
-
-  export class LeadsApi {
-    constructor(apiClient: ApiClient);
-    searchLeads(params: { term: string }): Promise<any>;
-  }
-} 
+  // All API classes follow the same pattern: constructor takes ApiClient, all methods return Promise<any>
+  export class DealsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class PersonsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class OrganizationsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class PipelinesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class StagesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class ItemSearchApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class LeadsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class ActivitiesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class NotesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class UsersApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class ProductsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class FiltersApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class FilesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class ProjectsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class TasksApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class GoalsApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class WebhooksApi { constructor(apiClient: ApiClient); [method: string]: any; }
+  export class RolesApi { constructor(apiClient: ApiClient); [method: string]: any; }
+}

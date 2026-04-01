@@ -27,3 +27,9 @@ yarn-error.log*
 # OS specific
 .DS_Store
 Thumbs.db
+
+# MCP config (contains API tokens)
+.mcp.json
+
+# Export files
+*.xlsx
